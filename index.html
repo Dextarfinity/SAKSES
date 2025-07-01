@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>QUESTIONS??</title>
+
+  <style>
+    /* ── Global layout ─────────────────────────────────────────────── */
+    :root{ --h1-size: clamp(2rem, 5vw + 1rem, 4rem); }
+    *{ box-sizing:border-box; }
+
+    body{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:3rem;
+      min-height:100vh;
+      margin:0;
+      padding:1rem;
+      text-align:center;
+      overflow:hidden;           /* stop scrollbars when No escapes */
+      font-family:system-ui,sans-serif;
+    }
+
+    h1{
+      font-size: clamp(1.5rem, 6vw, 3rem);
+      margin:0;
+      line-height:1.2;
+      word-break:break-word;
+      white-space:normal;
+      max-width:90vw;
+    }
+
+    /* shared flex rows (wrap on narrow) */
+    .images,.buttons{
+      display:flex;
+      flex-direction:row;
+      flex-wrap:wrap;
+      gap:2rem;
+      justify-content:center;
+      align-items:center;
+    }
+
+    button{
+      padding:0.6rem 1.2rem;
+      font-size:clamp(0.9rem,2.5vw,1.1rem);
+      cursor:pointer;
+    }
+
+    /* runaway “No”  */
+    #noBtn{ z-index:2; transition:left .25s ease, top .25s ease; }
+
+    /* media sizing */
+    img,video{
+      max-width:200px;
+      width:100%;
+      height:auto;
+      border-radius:6px;
+    }
+
+    /* ── Modal ─────────────────────────────────────────────── */
+    .modal{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.6);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:1rem;
+      z-index:5;
+    }
+    .modal.show{ display:flex; }
+
+    .modal-box{
+      background:#fff;
+      padding:1.5rem 2rem;
+      max-width:480px;
+      width:100%;
+      border-radius:10px;
+      box-shadow:0 10px 30px rgba(0,0,0,.25);
+      text-align:center;
+    }
+    .modal-box h2{
+      margin:0 0 1rem;
+      font-size:clamp(1.1rem,4vw,1.4rem);
+    }
+    .modal-box button{ margin-top:1.25rem; width:100%; }
+
+    .modal-media{
+      margin-top:1rem;
+      display:flex;
+      flex-direction:column;
+      gap:1rem;
+      align-items:center;
+    }
+  </style>
+</head>
+<body>
+  <h1>CRUSH MO BA AKO BABYLUVS KO?!??!?!!!</h1>
+
+  <div class="images">
+    <img src="zhak-bahaya.gif" alt="laughing cat gif">
+    <img src="CAT.jpg"         alt="sleepy cat photo">
+  </div>
+
+  <div class="buttons">
+    <button id="yesBtn">Yes</button>
+    <button id="noBtn">No</button>
+  </div>
+
+  <!-- Modal (opens on YES) -->
+  <div id="modal" class="modal">
+    <div class="modal-box">
+      <h2>Wow talaga?! 😍🥰😍🥰😍🥰</h2>
+      <p>KUNG SUMAKSES NGA NAMAAAANNNN! ehe!😍🥰</p>
+
+      <div class="modal-media">
+        <img src="shrek.gif" alt="banana cat crying gif">
+
+        <audio id="happyAudio" autoplay>
+          <source src="hehehehehehe.mp3" type="audio/mpeg">
+        </audio>
+
+        <video id="sadVideo" autoplay loop muted playsinline>
+          <source src="happyhappy.mp4" type="video/mp4">
+        </video>
+      </div>
+
+      <button id="closeModal">Close</button>
+    </div>
+  </div>
+
+  <script>
+    /* ───────────  R U N A W A Y  N O  ─────────── */
+    const noBtn   = document.getElementById('noBtn');
+    const PAD     = 20;
+    let   noFixed = false;
+
+    function hopNo(){
+      if(!noFixed){
+        const {left,top} = noBtn.getBoundingClientRect();
+        noBtn.style.position='fixed';
+        noBtn.style.left=`${left}px`;
+        noBtn.style.top =`${top}px`;
+        noFixed=true;
+      }
+      const maxX = innerWidth  - noBtn.offsetWidth  - PAD;
+      const maxY = innerHeight - noBtn.offsetHeight - PAD;
+      noBtn.style.left=`${PAD+Math.random()*maxX}px`;
+      noBtn.style.top =`${PAD+Math.random()*maxY}px`;
+    }
+    noBtn.addEventListener('mouseenter', hopNo);
+    noBtn.addEventListener('click',      hopNo);
+
+    /* ───────────  M O D A L  ( YES ) ─────────── */
+    const yesBtn     = document.getElementById('yesBtn');
+    const modal      = document.getElementById('modal');
+    const closeModal = document.getElementById('closeModal');
+    const happyAudio = document.getElementById('happyAudio');
+    const happyVideo = document.getElementById('happyVideo');
+
+    function openModal(){
+      modal.classList.add('show');
+      happyAudio.currentTime=0;  happyAudio.play().catch(()=>{});
+      happyVideo.currentTime=0;  happyVideo.play().catch(()=>{});
+    }
+    function closeModalFn(){
+      modal.classList.remove('show');
+      happyAudio.pause(); happyVideo.pause();
+    }
+
+    yesBtn.addEventListener('click', openModal);
+    closeModal.addEventListener('click', closeModalFn);
+    modal.addEventListener('click', e=>{ if(e.target===modal) closeModalFn(); });
+  </script>
+</body>
+</html>
